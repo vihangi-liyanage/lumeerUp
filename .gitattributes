@@ -1,0 +1,11 @@
+# Auto-detect text files and normalize to LF on commit
+* text=auto
+
+# Explicitly set these to LF (they come from create-next-app as LF)
+frontend/** eol=lf
+
+# Binary files - no line ending conversion
+*.ico binary
+*.png binary
+*.jpg binary
+*.svg binary
