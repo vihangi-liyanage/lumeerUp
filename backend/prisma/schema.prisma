@@ -1,0 +1,57 @@
+// ============================================================
+// LUMEERUP - Prisma Data Schema
+// PostgreSQL v16+ | ACID compliant
+// ============================================================
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ---- Users ----
+model User {
+  pk_user_id    String   @id @default(uuid()) @map("pk_user_id")
+  email         String   @unique @db.VarChar(255)
+  password_hash String?  @db.VarChar(255)
+  created_at    DateTime @default(now())
+
+  profiles UserProfile[]
+
+  @@index([email])
+  @@map("users")
+}
+
+// ---- User Profiles ----
+model UserProfile {
+  pk_profile_id      String   @id @default(uuid()) @map("pk_profile_id")
+  fk_user_id         String   @map("fk_user_id")
+  skills_matrix      Json     @db.JsonB
+  behavioral_score   Int      @default(0)
+  communication_score Int     @default(0)
+  resume_url         String   @db.Text
+
+  user      User            @relation(fields: [fk_user_id], references: [pk_user_id], onDelete: Cascade)
+  roadmaps  CareerRoadmap[]
+
+  @@index([fk_user_id])
+  @@index([skills_matrix], type: Gin)
+  @@map("user_profiles")
+}
+
+// ---- Career Roadmaps ----
+model CareerRoadmap {
+  pk_roadmap_id    String   @id @default(uuid()) @map("pk_roadmap_id")
+  fk_profile_id    String   @map("fk_profile_id")
+  target_role      String   @db.VarChar(100)
+  skill_gap_analysis Json   @db.JsonB
+  generated_date   DateTime @default(now())
+
+  profile UserProfile @relation(fields: [fk_profile_id], references: [pk_profile_id], onDelete: Cascade)
+
+  @@index([fk_profile_id])
+  @@map("career_roadmaps")
+}
