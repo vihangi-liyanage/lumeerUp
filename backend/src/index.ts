@@ -4,6 +4,10 @@ import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
 import { env } from './config/env';
 import { errorHandler } from './middleware/error-handler';
+import { authRouter } from './routes/authRoutes';
+import { resumeRouter } from './routes/resumeRoutes';
+import { analyticsRouter } from './routes/analyticsRoutes';
+import { assessmentRouter } from './routes/assessmentRoutes';
 
 const app = express();
 const PORT = parseInt(env.PORT, 10) || 4000;
@@ -30,6 +34,12 @@ app.use(express.urlencoded({ extended: true, limit: '1mb' }));
 app.get('/api/health', (_req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
+
+// API Routes
+app.use('/api/v1/auth', authRouter);
+app.use('/api/v1/resume', resumeRouter);
+app.use('/api/v1/profile', analyticsRouter);
+app.use('/api/v1/assessment', assessmentRouter);
 
 // Error handler
 app.use(errorHandler);
