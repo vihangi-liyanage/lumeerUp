@@ -13,10 +13,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           return null
         }
 
-        // Ideally, this calls a distinct /login endpoint.
-        // For the capstone, we utilize the /register or a generic /auth endpoint on our Node backend.
         try {
-          const response = await fetch("http://localhost:4000/api/v1/auth/register", {
+          const response = await fetch("http://localhost:4000/api/v1/auth/login", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -27,20 +25,20 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             }),
           })
   
-          if (response.ok) {
-            const data = await response.json()
-            if (data.user) {
-              return { id: data.user.id, email: data.user.email, accessToken: data.token }
-            }
-          } else {
-            // Fallback for a potential login scenario or if already registered
+          if (!response.ok) {
             console.error("Auth failed on backend", await response.text())
             return null
+          }
+
+          const data = await response.json()
+          if (data.user) {
+            return { id: data.user.id, email: data.user.email, accessToken: data.token }
           }
         } catch (error) {
           console.error("Auth error", error)
           return null
         }
+
         return null
       },
     }),

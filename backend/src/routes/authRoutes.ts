@@ -43,3 +43,37 @@ authRouter.post('/register', async (req, res) => {
     res.status(500).json({ error: 'Internal server error during registration' });
   }
 });
+
+authRouter.post('/login', async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+      res.status(400).json({ error: 'Email and password are required' });
+      return;
+    }
+
+    const user = await prisma.user.findUnique({ where: { email } });
+    if (!user || !user.password_hash) {
+      res.status(401).json({ error: 'Invalid email or password' });
+      return;
+    }
+
+    const isValid = await bcrypt.compare(password, user.password_hash);
+    if (!isValid) {
+      res.status(401).json({ error: 'Invalid email or password' });
+      return;
+    }
+
+    const token = jwt.sign(
+      { userId: user.pk_user_id, email: user.email },
+      env.JWT_SECRET,
+      { expiresIn: '7d' }
+    );
+
+    res.status(200).json({ user: { id: user.pk_user_id, email: user.email }, token });
+  } catch (error) {
+    console.error('Login error:', error);
+    res.status(500).json({ error: 'Internal server error during login' });
+  }
+});

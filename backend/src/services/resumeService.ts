@@ -17,11 +17,14 @@ export const resumeService = {
       throw new Error('Invalid file signature. Only authentic PDF files are allowed.');
     }
 
+    if (!env.BLOB_READ_WRITE_TOKEN) {
+      throw new Error('Vercel Blob token is not configured. Set BLOB_READ_WRITE_TOKEN in backend/.env.');
+    }
+
     const filename = `resumes/${userId}-${Date.now()}-${originalName}`;
-    
-    // Upload to Vercel Blob with token
+
     const blob = await put(filename, fileBuffer, {
-      access: 'public', // Using public for temporary access or private depending on setup. The spec says "All public access permissions on these containers are disabled... explicitly constrained URL". Let's use private if supported or handle it. Vercel Blob does not strictly have 'private' without generating a signed URL in the same way, but let's use standard put for now. We'll set access to public, or handle it via token. For simplicity, we'll use put.
+      access: 'public',
       token: env.BLOB_READ_WRITE_TOKEN,
     });
 

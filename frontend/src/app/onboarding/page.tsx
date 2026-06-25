@@ -25,8 +25,10 @@ export default function OnboardingPage() {
   const [isDragging, setIsDragging] = useState(false);
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const [uploadError, setUploadError] = useState<string | null>(null);
+  const [authError, setAuthError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [authSuccess, setAuthSuccess] = useState(false);
+  const [authToken, setAuthToken] = useState<string | null>(null);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -74,24 +76,84 @@ export default function OnboardingPage() {
 
   const handleAuthSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setAuthError(null);
     setIsLoading(true);
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-    setIsLoading(false);
-    setAuthSuccess(true);
-    setTimeout(() => {
-      setStep("upload");
-    }, 800);
+
+    const endpoint = authMode === "signup" ? "/register" : "/login";
+    try {
+      const response = await fetch(`http://localhost:4000/api/v1/auth${endpoint}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: formData.email,
+          password: formData.password,
+        }),
+      });
+
+      const data = await response.json();
+      if (!response.ok) {
+        setAuthError(data.error || "Authentication failed. Please try again.");
+        setIsLoading(false);
+        return;
+      }
+
+      setIsLoading(false);
+      setAuthSuccess(true);
+      setAuthToken(data.token);
+      localStorage.setItem("lumeerup_token", data.token);
+
+      setTimeout(() => {
+        setStep("upload");
+      }, 700);
+    } catch (error) {
+      console.error(error);
+      setAuthError("Unable to connect to the authentication server. Please try again later.");
+      setIsLoading(false);
+    }
   };
 
   const handleUploadSubmit = async () => {
-    if (!uploadedFile) return;
+    setUploadError(null);
+    if (!uploadedFile) {
+      setUploadError("Please upload a PDF resume before continuing.");
+      return;
+    }
+
+    const token = authToken || localStorage.getItem("lumeerup_token");
+    if (!token) {
+      setUploadError("Authentication token is missing. Please sign in again.");
+      return;
+    }
+
     setIsLoading(true);
-    // Simulate upload API call
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-    setIsLoading(false);
-    // Navigate to chat
-    window.location.href = "/chat";
+    const formDataPayload = new FormData();
+    formDataPayload.append("resume", uploadedFile);
+
+    try {
+      const response = await fetch("http://localhost:4000/api/v1/resume/upload", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        body: formDataPayload,
+      });
+
+      const data = await response.json();
+      if (!response.ok) {
+        setUploadError(data.error || "Resume upload failed. Please try again.");
+        setIsLoading(false);
+        return;
+      }
+
+      setIsLoading(false);
+      window.location.href = "/chat";
+    } catch (error) {
+      console.error(error);
+      setUploadError("Unable to upload resume. Please try again later.");
+      setIsLoading(false);
+    }
   };
 
   const formatFileSize = (bytes: number) => {
@@ -158,7 +220,11 @@ export default function OnboardingPage() {
                   <button
                     key={mode}
                     id={`auth-tab-${mode}`}
-                    onClick={() => setAuthMode(mode)}
+                    onClick={() => {
+                      setAuthMode(mode);
+                      setAuthError(null);
+                      setAuthSuccess(false);
+                    }}
                     className={`flex-1 py-2 text-sm font-medium rounded-lg transition-all duration-300 ${
                       authMode === mode
                         ? "bg-white/10 text-white shadow-lg"
@@ -246,6 +312,12 @@ export default function OnboardingPage() {
                   </div>
                 </div>
 
+                {authError && (
+                  <div className="rounded-2xl border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm text-red-200">
+                    {authError}
+                  </div>
+                )}
+
                 <button
                   id="auth-submit-btn"
                   type="submit"
@@ -267,10 +339,13 @@ export default function OnboardingPage() {
                 </button>
               </form>
 
-              <div className="flex items-center gap-2 mt-6 p-3 rounded-xl bg-white/[0.02] border border-white/5">
-                <Shield className="w-4 h-4 text-brand-cyan shrink-0" />
-                <p className="text-xs text-slate-500">
-                  Your data is end-to-end encrypted and never shared without your consent.
+              <div className="space-y-3 mt-6 rounded-3xl border border-white/10 bg-white/5 p-4 text-sm text-slate-300">
+                <div className="flex items-center gap-2">
+                  <Shield className="w-4 h-4 text-brand-cyan shrink-0" />
+                  <p className="font-medium text-white">Secure resume upload</p>
+                </div>
+                <p>
+                  After signing in, a secure JWT token is stored locally and automatically included when you upload your resume. This ensures the upload request is authenticated and authorized.
                 </p>
               </div>
             </div>
