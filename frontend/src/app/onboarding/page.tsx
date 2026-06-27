@@ -108,6 +108,24 @@ export default function OnboardingPage() {
       // Update global AuthContext
       login(data.token, { id: data.user.id, email: data.user.email });
 
+      // If they completed the assessment as guest, upload it now
+      const pendingAssessment = localStorage.getItem("lumeerup_pending_assessment");
+      if (pendingAssessment) {
+        try {
+          await fetch("http://localhost:4000/api/v1/assessment/submit", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${data.token}`,
+            },
+            body: JSON.stringify({ answers: JSON.parse(pendingAssessment) }),
+          });
+          localStorage.removeItem("lumeerup_pending_assessment");
+        } catch (err) {
+          console.error("Failed to upload pending guest assessment:", err);
+        }
+      }
+
       setTimeout(() => {
         setStep("upload");
       }, 700);

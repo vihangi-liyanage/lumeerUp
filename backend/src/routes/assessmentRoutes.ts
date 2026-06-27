@@ -10,25 +10,43 @@ assessmentRouter.post('/submit', requireAuth, async (req: AuthenticatedRequest, 
     const userId = req.user!.userId;
     const { answers } = req.body;
 
-    // Dummy behavior calculation based on answers array length
-    const newBehavioralScore = Math.min(100, 60 + (answers?.length || 0) * 5);
+    if (!answers || !Array.isArray(answers) || answers.length === 0) {
+      res.status(400).json({ error: 'Answers array is required and must not be empty' });
+      return;
+    }
 
-    const profile = await prisma.userProfile.findFirst({
+    // Dynamic scoring formula: choice 0 maps to 100, 1 maps to 80, 2 maps to 60, 3 maps to 40
+    const totalPoints = answers.reduce((sum: number, choice: number) => {
+      const choiceVal = typeof choice === 'number' ? choice : 0;
+      return sum + Math.max(20, 100 - choiceVal * 20);
+    }, 0);
+    const newBehavioralScore = Math.round(totalPoints / answers.length);
+
+    let profile = await prisma.userProfile.findFirst({
       where: { fk_user_id: userId },
       orderBy: { pk_profile_id: 'desc' }
     });
 
     if (!profile) {
-      res.status(404).json({ error: 'Profile not found' });
-      return;
+      // Create user profile if it doesn't exist yet
+      profile = await prisma.userProfile.create({
+        data: {
+          fk_user_id: userId,
+          skills_matrix: { languages: [], frameworks: [], tools: [] },
+          behavioral_score: newBehavioralScore,
+          communication_score: 70, // default baseline
+          resume_url: '',
+        }
+      });
+    } else {
+      // Update existing profile
+      profile = await prisma.userProfile.update({
+        where: { pk_profile_id: profile.pk_profile_id },
+        data: { behavioral_score: newBehavioralScore }
+      });
     }
 
-    const updatedProfile = await prisma.userProfile.update({
-      where: { pk_profile_id: profile.pk_profile_id },
-      data: { behavioral_score: newBehavioralScore }
-    });
-
-    res.status(200).json({ updatedProfile });
+    res.status(200).json({ profile });
   } catch (error) {
     console.error('Assessment submit error:', error);
     res.status(500).json({ error: 'Internal server error submitting assessment' });

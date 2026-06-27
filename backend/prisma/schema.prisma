@@ -33,6 +33,13 @@ model UserProfile {
   behavioral_score   Int      @default(0)
   communication_score Int     @default(0)
   resume_url         String   @db.Text
+  
+  // Profile completion fields
+  education_background String? @db.Text
+  current_study_level  String? @db.VarChar(100)
+  interests            String? @db.Text
+  career_goals         String? @db.Text
+  preferred_industries String? @db.Text
 
   user      User            @relation(fields: [fk_user_id], references: [pk_user_id], onDelete: Cascade)
   roadmaps  CareerRoadmap[]
