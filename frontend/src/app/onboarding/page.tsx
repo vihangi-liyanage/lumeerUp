@@ -3,6 +3,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useCallback, useRef } from "react";
 import Link from "next/link";
+import { useAuth } from "@/lib/auth-context";
 import {
   ArrowLeft,
   Upload,
@@ -19,6 +20,7 @@ import {
 type AuthMode = "signin" | "signup";
 
 export default function OnboardingPage() {
+  const { login } = useAuth();
   const [authMode, setAuthMode] = useState<AuthMode>("signup");
   const [step, setStep] = useState<"auth" | "upload">("auth");
   const [showPassword, setShowPassword] = useState(false);
@@ -102,7 +104,9 @@ export default function OnboardingPage() {
       setIsLoading(false);
       setAuthSuccess(true);
       setAuthToken(data.token);
-      localStorage.setItem("lumeerup_token", data.token);
+      
+      // Update global AuthContext
+      login(data.token, { id: data.user.id, email: data.user.email });
 
       setTimeout(() => {
         setStep("upload");
@@ -148,7 +152,7 @@ export default function OnboardingPage() {
       }
 
       setIsLoading(false);
-      window.location.href = "/chat";
+      window.location.href = "/dashboard";
     } catch (error) {
       console.error(error);
       setUploadError("Unable to upload resume. Please try again later.");

@@ -66,27 +66,18 @@ export default function AssessmentPage() {
   };
 
   return (
-    <div className="min-h-screen bg-background text-white flex flex-col relative overflow-hidden">
+    <div className="p-6 md:p-10 min-h-screen bg-background text-white flex flex-col relative overflow-hidden">
       {/* Background Orbs */}
       <div className="absolute top-[10%] left-[20%] w-[30%] h-[30%] rounded-full bg-brand-cyan/10 blur-[120px] pointer-events-none" />
       <div className="absolute bottom-[10%] right-[20%] w-[30%] h-[30%] rounded-full bg-brand-purple/10 blur-[120px] pointer-events-none" />
 
-      <nav className="p-6 relative z-10 flex justify-between items-center">
-        <Link href="/" className="flex items-center gap-2">
-          <div className="relative w-8 h-8 flex items-center justify-center">
-            <div className="absolute inset-0 bg-gradient-to-tr from-brand-cyan via-brand-blue to-brand-purple rounded-md rotate-12 opacity-80" />
-            <span className="relative font-bold text-white z-10">L</span>
-          </div>
-          <span className="font-bold tracking-widest hidden sm:block">LUMEERUP</span>
-        </Link>
-        {!isCompleted && (
-          <span className="text-sm font-medium text-slate-400">
-            Step {currentStep + 1} of {questions.length}
-          </span>
-        )}
-      </nav>
-
       <main className="flex-1 flex flex-col items-center justify-center p-4 relative z-10">
+        {!isCompleted && (
+          <div className="w-full max-w-2xl flex justify-between items-center mb-4 text-xs font-semibold uppercase tracking-wider text-slate-500">
+            <span>Career Assessment</span>
+            <span>Step {currentStep + 1} of {questions.length}</span>
+          </div>
+        )}
         <AnimatePresence mode="wait">
           {!isCompleted ? (
             <motion.div

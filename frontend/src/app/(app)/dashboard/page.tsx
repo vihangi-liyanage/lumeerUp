@@ -23,24 +23,10 @@ export default function AnalyticsDashboard() {
   if (!mounted) return null;
 
   return (
-    <div className="min-h-screen bg-background text-white p-6 md:p-12 relative overflow-hidden">
+    <div className="p-6 md:p-10 min-h-screen bg-background text-white relative overflow-hidden">
       {/* Glow Effects */}
       <div className="fixed top-[-10%] right-[-5%] w-[40%] h-[40%] rounded-full bg-brand-cyan/10 blur-[100px] pointer-events-none" />
       <div className="fixed bottom-[-10%] left-[-5%] w-[40%] h-[40%] rounded-full bg-brand-purple/10 blur-[100px] pointer-events-none" />
-
-      <nav className="flex items-center justify-between mb-12 relative z-10">
-        <Link href="/" className="flex items-center gap-2">
-          <div className="relative w-8 h-8 flex items-center justify-center">
-            <div className="absolute inset-0 bg-gradient-to-tr from-brand-cyan via-brand-blue to-brand-purple rounded-md rotate-12 opacity-80" />
-            <span className="relative font-bold text-white z-10">L</span>
-          </div>
-        </Link>
-        <Link href="/assessment">
-          <button className="px-5 py-2 text-sm font-semibold rounded-full bg-white text-black hover:scale-105 transition-transform shadow-[0_0_20px_-5px_rgba(255,255,255,0.3)]">
-            Take Assessment
-          </button>
-        </Link>
-      </nav>
 
       <main className="max-w-7xl mx-auto relative z-10">
         <header className="mb-12">

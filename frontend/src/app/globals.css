@@ -3,6 +3,8 @@
 :root {
   --background: #080c16;
   --foreground: #f8fafc;
+  --sidebar-width: 260px;
+  --sidebar-collapsed-width: 72px;
 }
 
 @theme inline {
@@ -13,8 +15,22 @@
   
   /* LumeerUp Brand Colors based on logo */
   --color-brand-cyan: #20d994;
+  --color-brand-green: #20d994;
   --color-brand-blue: #3b82f6;
   --color-brand-purple: #a855f7;
+
+  /* Extended palette */
+  --color-brand-cyan-dim: #1a7a55;
+  --color-brand-blue-dim: #1e40af;
+  --color-brand-purple-dim: #6b21a8;
+  --color-brand-rose: #f43f5e;
+  --color-brand-amber: #f59e0b;
+  --color-brand-teal: #14b8a6;
+
+  /* Surface colors for cards and containers */
+  --color-surface: #0f1629;
+  --color-surface-elevated: #141b2d;
+  --color-surface-overlay: #1a2342;
 }
 
 body {
@@ -22,4 +38,42 @@ body {
   color: var(--foreground);
   font-family: var(--font-sans), sans-serif;
   overflow-x: hidden;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Smooth transitions for sidebar */
+.sidebar-transition {
+  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+              transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Glass card effect */
+.glass-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(20px);
+}
+
+/* Pulse glow for active nav items */
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 15px -5px rgba(32, 217, 148, 0.4); }
+  50% { box-shadow: 0 0 25px -5px rgba(32, 217, 148, 0.6); }
 }
