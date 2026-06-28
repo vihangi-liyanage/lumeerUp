@@ -3,7 +3,6 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useCallback, useRef } from "react";
 import Link from "next/link";
-import { useAuth } from "@/lib/auth-context";
 import {
   ArrowLeft,
   Upload,
@@ -20,7 +19,6 @@ import {
 type AuthMode = "signin" | "signup";
 
 export default function OnboardingPage() {
-  const { login } = useAuth();
   const [authMode, setAuthMode] = useState<AuthMode>("signup");
   const [step, setStep] = useState<"auth" | "upload">("auth");
   const [showPassword, setShowPassword] = useState(false);
@@ -104,27 +102,7 @@ export default function OnboardingPage() {
       setIsLoading(false);
       setAuthSuccess(true);
       setAuthToken(data.token);
-      
-      // Update global AuthContext
-      login(data.token, { id: data.user.id, email: data.user.email });
-
-      // If they completed the assessment as guest, upload it now
-      const pendingAssessment = localStorage.getItem("lumeerup_pending_assessment");
-      if (pendingAssessment) {
-        try {
-          await fetch("http://localhost:4000/api/v1/assessment/submit", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${data.token}`,
-            },
-            body: JSON.stringify({ answers: JSON.parse(pendingAssessment) }),
-          });
-          localStorage.removeItem("lumeerup_pending_assessment");
-        } catch (err) {
-          console.error("Failed to upload pending guest assessment:", err);
-        }
-      }
+      localStorage.setItem("lumeerup_token", data.token);
 
       setTimeout(() => {
         setStep("upload");
@@ -170,7 +148,7 @@ export default function OnboardingPage() {
       }
 
       setIsLoading(false);
-      window.location.href = "/dashboard";
+      window.location.href = "/chat";
     } catch (error) {
       console.error(error);
       setUploadError("Unable to upload resume. Please try again later.");
