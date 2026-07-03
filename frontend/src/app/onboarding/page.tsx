@@ -163,29 +163,31 @@ export default function OnboardingPage() {
   };
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-background flex items-center justify-center p-4">
+    <div className="relative min-h-screen overflow-hidden bg-background flex items-center justify-center p-4 pt-24 pb-12">
       {/* Background gradients */}
       <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] rounded-full bg-brand-purple/20 blur-[120px] mix-blend-screen pointer-events-none" />
       <div className="absolute bottom-[-20%] right-[-10%] w-[60%] h-[60%] rounded-full bg-brand-cyan/20 blur-[120px] mix-blend-screen pointer-events-none" />
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[40%] h-[40%] rounded-full bg-brand-blue/10 blur-[100px] pointer-events-none" />
 
-      {/* Back button */}
-      <Link
-        href="/"
-        className="absolute top-6 left-6 flex items-center gap-2 text-slate-400 hover:text-white transition-colors text-sm z-10"
-      >
-        <ArrowLeft className="w-4 h-4" />
-        Back to Home
-      </Link>
-
-      {/* Logo top-center */}
-      <div className="absolute top-6 left-1/2 -translate-x-1/2 flex items-center gap-2 z-10">
-        <div className="relative w-8 h-8 flex items-center justify-center">
-          <div className="absolute inset-0 bg-gradient-to-tr from-brand-cyan via-brand-blue to-brand-purple rounded-md rotate-12 opacity-80" />
-          <div className="absolute inset-0 bg-gradient-to-bl from-brand-purple via-brand-blue to-brand-cyan rounded-md -rotate-12 opacity-80 mix-blend-overlay" />
-          <span className="relative font-bold text-white z-10">L</span>
+      {/* Header bar for desktop/mobile */}
+      <div className="absolute top-0 left-0 right-0 p-6 flex flex-row items-center justify-between z-10 max-w-7xl mx-auto w-full">
+        <Link
+          href="/"
+          className="flex items-center gap-2 text-slate-400 hover:text-white transition-colors text-sm"
+        >
+          <ArrowLeft className="w-4 h-4" />
+          <span className="hidden sm:inline">Back to Home</span>
+        </Link>
+        
+        <div className="flex items-center gap-2 absolute left-1/2 -translate-x-1/2">
+          <div className="relative w-8 h-8 flex items-center justify-center">
+            <div className="absolute inset-0 bg-gradient-to-tr from-brand-cyan via-brand-blue to-brand-purple rounded-md rotate-12 opacity-80" />
+            <div className="absolute inset-0 bg-gradient-to-bl from-brand-purple via-brand-blue to-brand-cyan rounded-md -rotate-12 opacity-80 mix-blend-overlay" />
+            <span className="relative font-bold text-white z-10">L</span>
+          </div>
+          <span className="text-xl font-bold tracking-widest text-white">LUMEERUP</span>
         </div>
-        <span className="text-xl font-bold tracking-widest text-white">LUMEERUP</span>
+        <div className="w-12 sm:w-24" /> {/* Spacer */}
       </div>
 
       <AnimatePresence mode="wait">
@@ -199,7 +201,7 @@ export default function OnboardingPage() {
             className="w-full max-w-md"
           >
             {/* Auth Card */}
-            <div className="relative p-8 rounded-3xl bg-white/[0.04] border border-white/10 backdrop-blur-xl shadow-[0_0_80px_-20px_rgba(59,130,246,0.3)]">
+            <div className="relative p-6 sm:p-8 rounded-3xl bg-white/[0.04] border border-white/10 backdrop-blur-xl shadow-[0_0_80px_-20px_rgba(59,130,246,0.3)]">
               {/* Decorative top gradient line */}
               <div className="absolute top-0 left-1/2 -translate-x-1/2 w-2/3 h-px bg-gradient-to-r from-transparent via-brand-cyan to-transparent" />
 
@@ -360,7 +362,7 @@ export default function OnboardingPage() {
             className="w-full max-w-lg"
           >
             {/* Upload Card */}
-            <div className="relative p-8 rounded-3xl bg-white/[0.04] border border-white/10 backdrop-blur-xl shadow-[0_0_80px_-20px_rgba(168,85,247,0.3)]">
+            <div className="relative p-6 sm:p-8 rounded-3xl bg-white/[0.04] border border-white/10 backdrop-blur-xl shadow-[0_0_80px_-20px_rgba(168,85,247,0.3)]">
               <div className="absolute top-0 left-1/2 -translate-x-1/2 w-2/3 h-px bg-gradient-to-r from-transparent via-brand-purple to-transparent" />
 
               <div className="flex items-center justify-between mb-2">

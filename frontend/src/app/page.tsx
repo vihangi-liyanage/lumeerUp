@@ -84,57 +84,6 @@ export default function LandingPage() {
                 </motion.button>
               </Link>
             </motion.div>
-
-            <motion.section
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.24 }}
-              className="mt-12 rounded-3xl border border-white/10 bg-white/5 p-8 text-slate-300 shadow-[0_0_50px_-25px_rgba(32,217,148,0.25)]"
-            >
-              <div className="mb-8">
-                <p className="text-xs uppercase tracking-[0.35em] text-brand-cyan">How It Works</p>
-                <h2 className="mt-3 text-3xl font-semibold text-white sm:text-4xl">Your career journey in 5 steps</h2>
-              </div>
-
-              <div className="grid gap-4 lg:grid-cols-2">
-                {[
-                  {
-                    title: 'Step 1',
-                    heading: 'Create Your Profile',
-                    description: 'Register and provide your academic and personal information.',
-                  },
-                  {
-                    title: 'Step 2',
-                    heading: 'Complete Assessments',
-                    description: 'Evaluate your skills, strengths, and interests.',
-                  },
-                  {
-                    title: 'Step 3',
-                    heading: 'Upload Your Resume',
-                    description: 'Allow AI to analyze your qualifications and experience.',
-                  },
-                  {
-                    title: 'Step 4',
-                    heading: 'Receive Recommendations',
-                    description: 'Discover suitable career paths and opportunities.',
-                  },
-                  {
-                    title: 'Step 5',
-                    heading: 'Follow Your Roadmap',
-                    description: 'Track progress and develop the skills needed for success.',
-                  },
-                ].map((step) => (
-                  <div
-                    key={step.title}
-                    className="rounded-3xl border border-white/10 bg-slate-950/30 p-6 transition hover:-translate-y-1 hover:border-brand-cyan/30 hover:bg-slate-900/70"
-                  >
-                    <p className="text-sm uppercase tracking-[0.35em] text-brand-cyan">{step.title}</p>
-                    <h3 className="mt-3 text-xl font-semibold text-white">{step.heading}</h3>
-                    <p className="mt-3 text-sm leading-6 text-slate-400">{step.description}</p>
-                  </div>
-                ))}
-              </div>
-            </motion.section>
           </div>
         </main>
       </div>
