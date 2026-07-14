@@ -1,4 +1,14 @@
-# LUMEERUP – AI-Powered Career Guidance Platform
+## Future Enhancements
+
+* AI Career Advisor Chatbot
+* CV Scoring System
+* Internship Recommendations
+* Job Market Trend Analysis
+* Advanced Analytics Dashboard
+
+## Status
+
+🚧 This project is currently under active development. Core features have been implemented, and the application is in the testing, debugging, and optimization phase before the final release.# LUMEERUP – AI-Powered Career Guidance Platform
 
 ## Overview
 
