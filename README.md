@@ -88,15 +88,5 @@ Create a `.env` file and add the required configuration.
 npm run dev
 ```
 
-## Future Enhancements
 
-* AI Career Advisor Chatbot
-* CV Scoring System
-* Internship Recommendations
-* Job Market Trend Analysis
-* Advanced Analytics Dashboard
-
-## Status
-
-🚧 This project is currently under active development. Core features have been implemented, and the application is in the testing, debugging, and optimization phase before the final release.
 
