@@ -100,8 +100,3 @@ npm run dev
 
 🚧 This project is currently under active development. Core features have been implemented, and the application is in the testing, debugging, and optimization phase before the final release.
 
-## Author
-
-**Vihangi Wasana**
-
-Computer Science Undergraduate
